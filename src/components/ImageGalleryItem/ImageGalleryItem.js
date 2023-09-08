@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
+import { useState } from 'react';
 import { ImageGalleryItemWrapper, Image } from './ImageGalleryItem.styled';
-import { Component } from 'react';
 import ReactModal from 'react-modal';
 
 const customStyles = {
@@ -23,32 +23,25 @@ const customStyles = {
 
 ReactModal.setAppElement('#root');
 
-export class ImageGalleryItem extends Component {
-  state = {
-    isModalOpen: false,
-  };
 
-  handleOpenModal = () => this.setState({ isModalOpen: true });
-  handleCloseModal = () => this.setState({ isModalOpen: false });
+export const ImageGalleryItem = ({image: { webformatURL, largeImageURL, tags }})  => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  render() {
-    const {
-      image: { webformatURL, largeImageURL, tags },
-    } = this.props;
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
     return (
       <ImageGalleryItemWrapper>
-        <Image src={webformatURL} alt={tags} onClick={this.handleOpenModal} />
+        <Image src={webformatURL} alt={tags} onClick={handleOpenModal} />
         <ReactModal
-          isOpen={this.state.isModalOpen}
-          onRequestClose={this.handleCloseModal}
+          isOpen={isModalOpen}
+          onRequestClose={handleCloseModal}
           style={customStyles}
         >
           <img src={largeImageURL} alt={tags} />
         </ReactModal>
       </ImageGalleryItemWrapper>
     );
-  }
 }
 
 ImageGalleryItem.propTypes = {
